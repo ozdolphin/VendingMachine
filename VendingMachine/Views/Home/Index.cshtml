@@ -1,0 +1,66 @@
+﻿@model  VendingMachine.ViewModels.MachineViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <h2>Vending Machine</h2>
+</div>
+
+<div class="row">
+    <div id="container" class="cols">
+        @foreach (var item in Model.Slots)
+        {
+            if (item.IsEmpty)
+            {
+                <div class="box" style="border:5px solid black;">
+                    <p>Not available</p>
+                </div>
+            }
+            else
+            {
+                <div class="box" style="border:5px solid black; background-color:aquamarine">
+                    <p>@item.Drink.Name</p>
+                    <p>Price: @string.Format("$ {0}", item.Price)</p>
+                </div>
+            }
+
+        }
+    </div>
+    </div>
+<div class="row">
+    <div class="col-md-5">
+        <form asp-controller="Home" asp-action="Index" method="post">
+            @if (Model.DrinkItems.Count() == 0)
+            {
+                <p>No more drink in the machine, please click restock button</p>
+
+            }
+            else
+            {
+
+                <fieldset>
+
+                    Please select slot number from dorp down
+                    @Html.DropDownListFor(m => m.SelectedSlotNumber, Model.DrinkItems)
+                    @Html.DropDownListFor(m => m.SelectedPaymentType, Model.PaymentTypes)
+                    <p>
+                        <input type="submit" value="Purchase" name="purchase" />
+                    </p>
+                </fieldset>
+            }
+
+            <fieldset>
+
+                <p>
+                    <input type="submit" value="Restock" name="restock" />
+                </p>
+
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-5">
+        <p>Cash: @Model.CashTotal</p>
+        <p>Credit Card: @Model.CreditTotal</p>
+    </div>
+</div>
